@@ -17,7 +17,7 @@ def clean_customers():
 def clean_geolocation():
     print("Nettoyage: Geolocation (Agrégation)...")
     # Ce fichier contient beaucoup de doublons pour le même code postal.
-    # On fait une moyenne des lat/lng pour avoir un point unique par code postal.
+    
     df = pd.read_csv(os.path.join(RAW_DIR, 'olist_geolocation_dataset.csv'), dtype={'geolocation_zip_code_prefix': str})
     
     df_agg = df.groupby('geolocation_zip_code_prefix').agg({
