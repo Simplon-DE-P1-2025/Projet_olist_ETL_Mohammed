@@ -4,7 +4,7 @@ from db_config_connection import engine  # on réutilise l'engine existant
 def init_db():
     print("🛠 Création du schéma de base de données...")
 
-    # Tables à DROP dans l'ordre enfants → parents
+    
     drop_tables = [
         "order_reviews",
         "order_payments",
@@ -16,7 +16,7 @@ def init_db():
         "geolocation"
     ]
 
-    # Tables à CREATE dans l'ordre parents → enfants
+    # Tables à CREATE
     create_table_sqls = [
         ("geolocation", """CREATE TABLE geolocation (
             zip_code_prefix VARCHAR(10) PRIMARY KEY,
@@ -92,7 +92,7 @@ def init_db():
         );""")
     ]
 
-    with engine.begin() as conn:  # begin() gère automatiquement le commit
+    with engine.begin() as conn:  
         # DROP tables
         for table in drop_tables:
             print(f"Suppression de {table} si elle existe...")
