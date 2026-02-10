@@ -9,7 +9,7 @@ from Script.ingest_data import import_data
 def main():
     print("=== 🚀 Pipeline de nettoyage et ingestion démarré ===\n")
 
-    # 1️⃣ Nettoyage des CSV
+    # Nettoyage des CSV
     print("--- Étape 1 : Nettoyage des fichiers CSV ---")
     Clean.clean_customers()
     Clean.clean_geolocation()
@@ -21,12 +21,12 @@ def main():
     Clean.clean_sellers()
     print("--- Nettoyage terminé ! ---\n")
 
-    # 2️⃣ Création des tables
+    # Création des tables
     print("--- Étape 2 : Création des tables PostgreSQL ---")
     init_db()
     print("--- Création des tables terminée ! ---\n")
 
-    # 3️⃣ Insertion des données
+    # Insertion des données
     print("--- Étape 3 : Insertion des données dans PostgreSQL ---")
     import_data()
     print("--- Ingestion terminée ! ---\n")
