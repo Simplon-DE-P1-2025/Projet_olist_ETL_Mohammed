@@ -1,0 +1,155 @@
+# Projet Nettoyage et Ingestion de Données Olist
+
+[![Python](https://img.shields.io/badge/python-3.10+-blue)](https://www.python.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18.1-blue)](https://www.postgresql.org/)
+
+---
+
+## Description
+
+Ce projet automatise le **nettoyage, la création de tables et l’ingestion** de données issues du dataset [Olist](https://www.kaggle.com/olistbr/brazilian-ecommerce) dans une base de données PostgreSQL.  
+
+Le pipeline complet fait :
+
+1. Nettoyage et préparation des fichiers CSV bruts.
+2. Création des tables PostgreSQL avec les relations clés étrangères.
+3. Insertion des données nettoyées dans la base.
+
+---
+
+## Structure du projet
+
+Projet nettoyage/
+│
+├─ Script/
+│ ├─ Clean.py # Nettoyage et préparation des CSV
+│ ├─ create_tables.py # Création des tables PostgreSQL
+│ ├─ ingest_data.py # Insertion des données
+│ └─ db_config_connection.py # Configuration de la connexion à la DB
+│
+├─ Data/ # CSV bruts
+├─ cleaned_data/ # CSV nettoyés
+├─ .env # Variables d'environnement (DB, chemins)
+└─ main.py # Script principal pour exécuter le pipeline complet
+
+
+---
+
+## Prérequis
+
+- Python 3.10 ou supérieur  
+- PostgreSQL 18.1 ou supérieur installé  
+- Modules Python :
+
+```bash
+pip install pandas sqlalchemy python-dotenv
+
+Fichier .env (à créer dans la racine) :
+
+DB_USER=postgres
+DB_PASS=motdepasse
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=olist_db
+RAW_DIR=./Data/
+CLEAN_DIR=./cleaned_data/
+
+Instructions d’exécution
+Windows (CMD / PowerShell)
+cd "C:\chemin\vers\Projet nettoyage"
+set PYTHONPATH=%CD%\Script
+python main.py
+
+Linux / macOS
+cd "/chemin/vers/Projet nettoyage"
+export PYTHONPATH=$PWD/Script
+python3 main.py
+
+Pipeline
+
+Le pipeline fonctionne en 3 étapes :
+
+[CSV bruts - Data/] 
+        │
+        ▼
+  [Nettoyage CSV - Clean.py]
+        │
+        ▼
+[CSV nettoyés - cleaned_data/]
+        │
+        ▼
+[Création tables PostgreSQL - create_tables.py]
+        │
+        ▼
+[Insertion données - ingest_data.py]
+        │
+        ▼
+[Base de données PostgreSQL prête à l'emploi]
+
+Nettoyage des données
+
+Les codes postaux (zip_code_prefix) et IDs sont convertis en string pour éviter les erreurs.
+
+Les colonnes de dates sont converties en datetime.
+
+Les champs texte (review_comment_title, review_comment_message, product_category_name) sont nettoyés pour supprimer les sauts de ligne.
+
+Les doublons dans geolocation sont agrégés par code postal (moyenne des lat/lng).
+
+Les noms de catégories de produits sont traduits en anglais, avec fallback sur le nom original si absent.
+
+Schéma de la base PostgreSQL
+
+Tables créées :
+
+geolocation
+
+sellers
+
+products
+
+customers
+
+orders
+
+order_items
+
+order_payments
+
+order_reviews
+
+Relations clés étrangères :
+
+orders.customer_id → customers.customer_id
+
+order_items.order_id → orders.order_id
+
+order_items.product_id → products.product_id
+
+order_items.seller_id → sellers.seller_id
+
+order_payments.order_id → orders.order_id
+
+order_reviews.order_id → orders.order_id
+
+Toutes les tables sont supprimées et recréées à chaque exécution pour garantir un schéma propre.
+
+Exécution dans VS Code
+
+Ouvrir le projet dans VS Code.
+
+Exécution dans VS Code
+
+1- Ouvrir le projet dans VS Code.
+1- Executer le main.py.
+
+Licence
+
+MIT License (ou autre licence de ton choix)
+
+Auteur
+
+Nounou31 – GitHub
+ – Contact : ettayeb31@gmail.com
+
+
